@@ -6,7 +6,7 @@ import Trade from './pages/Trade/Trade';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/MeuSite">
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="/receitas" replace />} />
