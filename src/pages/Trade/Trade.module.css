@@ -1,0 +1,49 @@
+.trade {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.message {
+  background: white;
+  border-radius: 8px;
+  padding: 3rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.messageText {
+  font-size: 1.5rem;
+  color: #34495e;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.messageSubtext {
+  font-size: 1rem;
+  color: #7f8c8d;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .message {
+    padding: 2rem;
+  }
+
+  .messageText {
+    font-size: 1.25rem;
+  }
+}
