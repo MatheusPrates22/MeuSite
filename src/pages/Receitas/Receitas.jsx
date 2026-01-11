@@ -4,6 +4,7 @@ import styles from './Receitas.module.css';
 
 function Receitas() {
   const [receitas, setReceitas] = useState([]);
+  const [expandedReceitas, setExpandedReceitas] = useState(new Set());
   const [formData, setFormData] = useState({
     titulo: '',
     ingredientes: '',
@@ -40,6 +41,18 @@ function Receitas() {
       receitasService.remove(id);
       loadReceitas();
     }
+  };
+
+  const toggleReceita = (id) => {
+    setExpandedReceitas((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -102,36 +115,51 @@ function Receitas() {
           <p className={styles.empty}>Nenhuma receita cadastrada ainda.</p>
         ) : (
           <div className={styles.receitasList}>
-            {receitas.map((receita) => (
-              <div key={receita.id} className={styles.receitaCard}>
-                <div className={styles.receitaHeader}>
-                  <h3 className={styles.receitaTitle}>{receita.titulo}</h3>
-                  <button
-                    onClick={() => handleRemove(receita.id)}
-                    className={styles.removeButton}
-                    title="Remover receita"
-                  >
-                    ×
-                  </button>
+            {receitas.map((receita) => {
+              const isExpanded = expandedReceitas.has(receita.id);
+              return (
+                <div key={receita.id} className={styles.receitaCard}>
+                  <div className={styles.receitaHeader}>
+                    <h3
+                      className={styles.receitaTitle}
+                      onClick={() => toggleReceita(receita.id)}
+                    >
+                      {isExpanded ? '▼' : '▶'} {receita.titulo}
+                    </h3>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemove(receita.id);
+                      }}
+                      className={styles.removeButton}
+                      title="Remover receita"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  {isExpanded && (
+                    <div className={styles.receitaContent}>
+                      {receita.ingredientes && (
+                        <div className={styles.receitaSection}>
+                          <strong>Ingredientes:</strong>
+                          <p className={styles.receitaText}>
+                            {receita.ingredientes}
+                          </p>
+                        </div>
+                      )}
+                      {receita.instrucoes && (
+                        <div className={styles.receitaSection}>
+                          <strong>Instruções:</strong>
+                          <p className={styles.receitaText}>
+                            {receita.instrucoes}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
-                {receita.ingredientes && (
-                  <div className={styles.receitaSection}>
-                    <strong>Ingredientes:</strong>
-                    <p className={styles.receitaContent}>
-                      {receita.ingredientes}
-                    </p>
-                  </div>
-                )}
-                {receita.instrucoes && (
-                  <div className={styles.receitaSection}>
-                    <strong>Instruções:</strong>
-                    <p className={styles.receitaContent}>
-                      {receita.instrucoes}
-                    </p>
-                  </div>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </section>
